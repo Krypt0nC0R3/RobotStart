@@ -407,14 +407,14 @@ data:extend{
           layers =
           {
             {
-              filename = "__RobotStart__/graphics/entity/iron-active-provider-chest.png",
+              filename = "__RobotStart__/graphics/entity/iron-passive-provider-chest.png",
               priority = "extra-high",
               width = 34,
               height = 38,
               shift = util.by_pixel(0, -0.5),
               hr_version =
               {
-                filename = "__RobotStart__/graphics/entity/hr-iron-active-provider-chest.png",
+                filename = "__RobotStart__/graphics/entity/hr-iron-passive-provider-chest.png",
                 priority = "extra-high",
                 width = 66,
                 height = 76,
@@ -771,7 +771,7 @@ data:extend{
       transfer_distance = 0.5, -- 0.5
       max_energy = "0.5MJ", -- 1.5MJ
       energy_per_tick = "0.02kJ", -- 0.05
-      speed_multiplier_when_out_of_energy = 0.1, -- 0.2
+      speed_multiplier_when_out_of_energy = 0.2, -- 0.2
       energy_per_move = "2.5kJ", --5kj
       min_to_charge = 0.19,
       max_to_charge = 0.95,
@@ -812,7 +812,7 @@ data:extend{
     transfer_distance = 0.5, -- 0.5
     max_energy = "0.5MJ", -- 1.5MJ
     energy_per_tick = "0.02kJ", -- 0.05
-    speed_multiplier_when_out_of_energy = 0.1, -- 0.2
+    speed_multiplier_when_out_of_energy = 0.2, -- 0.2
     energy_per_move = "2.5kJ", --5kj
     min_to_charge = 0.2,
     max_to_charge = 0.95,

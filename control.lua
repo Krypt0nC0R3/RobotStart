@@ -88,9 +88,11 @@ local function create_roboport(center, surface, player)
                     {"power-switch", 5},
                     {"iron-active-provider-chest", 10},
                     {"iron-buffer-chest", 20},
-                    {"iron-passive-provider-chest", 100},
-                    {"iron-requester-chest", 100},
-                    {"iron-storage-chest", 100}
+                    {"iron-passive-provider-chest", 50},
+                    {"iron-requester-chest", 50},
+                    {"iron-storage-chest", 50},
+					{"inserter", 50},
+					{"stone-furnace", 50}
                 }
         }},
         {"iron-storage-chest", {y = -2,x = 4}, {}},
