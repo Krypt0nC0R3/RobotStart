@@ -76,5 +76,14 @@ data:extend{
         place_result = "early-construction-robot",
         stack_size = 50
     },
-
+    {
+        type = "item",
+        name = "inventory-blocker",
+        icon = "__RobotStart__/graphics/items/inventory-blocker.png",
+        icon_size = 64,
+        icon_mipmaps = 4,
+        subgroup = "logistic-network",
+        order = "a[robot]-b[early-construction-robot]",
+        stack_size = 1
+    },
 }

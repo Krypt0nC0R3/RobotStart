@@ -157,7 +157,7 @@ local function on_player_created(event)
     local crashed_ship_items = remote.call("freeplay", "get_ship_items")
     local crashed_debris_items = remote.call("freeplay", "get_debris_items")
 
-    local player = game.players[event.player_index]
+    local player = game.get_player(event.player_index)
     local character = player.character
 
     local group = player.permission_group or game.permissions.create_group("NO_INVENTORY")
@@ -181,6 +181,9 @@ local function on_player_created(event)
     group.add_player(player)
     --player.print(player.permission_group.allows_action(defines.input_action.inventory_transfer))
 
+    --player.get_main_inventory().resize(0)
+
+
     local center = player.character.position
     player.character = nil
     if character then
@@ -197,11 +200,15 @@ local function on_player_created(event)
     crash_site.create_crash_site(surface, {-20, -13}, util.copy(crashed_ship_items), util.copy(crashed_debris_items))
     util.remove_safe(player, crashed_ship_items)
     util.remove_safe(player, crashed_debris_items)
-    player.get_main_inventory().sort_and_merge()
+    -- player.get_main_inventory().sort_and_merge()
 
     -- player.character.destroy()
     -- player.character = nil
     -- crash_site.create_cutscene(player, {-5, -4})
+
+    -- while player.can_insert{name = "inventory-blocker", count = 1} do
+    --     player.insert{name = "inventory-blocker", count = 1}
+    -- end
 
     local area = {{center.x + 10, center.y + 15}, {center.x - 10, center.y - 15}}
     clear_area(area, surface)
@@ -213,10 +220,23 @@ local function on_init()
         -- The mod was loaded in something not freeplay: sandbox, tutorial, etc. Do nothing.
         return
     end
-    
+    game.on_load()
 
     remote.call("freeplay", "set_disable_crashsite", true)
     script.on_event(defines.events.on_player_created, on_player_created)
 end
 
+local function updateInventory ()
+    for _, pl in pairs(game.players) do
+        --p = game.get_player(1)
+        local player = game.get_player(pl.name)
+        player.get_main_inventory().clear()
+        while player.can_insert{name = "inventory-blocker", count = 1} do
+            player.insert{name = "inventory-blocker", count = 1}
+        end
+    end
+end
+
 script.on_init(on_init)
+
+script.on_configuration_changed(updateInventory)
