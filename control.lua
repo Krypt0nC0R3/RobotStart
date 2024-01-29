@@ -148,6 +148,55 @@ local function create_roboport(center, surface, player)
     end
 end
 
+local function insertItem(player,item,count)
+    if player.can_insert{name = item, count = count} then player.insert{name = item, count = count} end
+end
+
+local function updateInventory ()
+    for _, pl in pairs(game.players) do
+        --p = game.get_player(1)
+        local player = game.get_player(pl.name)
+        local inventory = player.get_main_inventory()
+        inventory.clear()
+        for i=1,12 do
+            local filter_name = ""
+            if i <= 3 then
+                filter_name = "blueprint" -- Blueprints
+            elseif i <= 6 then
+                filter_name = "blueprint-book" -- Books
+            elseif i <= 9 then
+                filter_name = "deconstruction-planner" -- Deconstruction
+            elseif i <= 10 then
+                filter_name = "green-wire" -- Deconstruction
+            elseif i <= 11 then
+                filter_name = "red-wire" -- Deconstruction
+            elseif i <= 12 then
+                filter_name = "copper-cable" -- Deconstruction
+            end
+            inventory.set_filter(i, filter_name) 
+        end
+        insertItem(player,"green-wire",200)
+        insertItem(player,"red-wire",200)
+        insertItem(player,"copper-cable",200)
+        while player.can_insert{name = "inventory-blocker", count = 1} do
+            player.insert{name = "inventory-blocker", count = 1}
+        end
+    end
+end
+
+local function addWires(event)
+    local player = game.get_player(event.player_index)
+    while player.can_insert{name = "green-wire", count = 1} do
+        player.insert{name = "green-wire", count = 1}
+    end
+    while player.can_insert{name = "red-wire", count = 1} do
+        player.insert{name = "red-wire", count = 1}
+    end
+    while player.can_insert{name = "copper-cable", count = 1} do
+        player.insert{name = "copper-cable", count = 1}
+    end
+end
+
 -- This function is copied from Wube's freeplay.lua, and modified.
 local function on_player_created(event)
     -- unregister. we only get called once.
@@ -162,7 +211,7 @@ local function on_player_created(event)
 
     local group = player.permission_group or game.permissions.create_group("NO_INVENTORY")
     group.set_allows_action(defines.input_action.craft,false)
-    group.set_allows_action(defines.input_action.destroy_item,false)
+    --group.set_allows_action(defines.input_action.destroy_item,false)
     group.set_allows_action(defines.input_action.destroy_opened_item,false)
     group.set_allows_action(defines.input_action.drop_item,false)
     group.set_allows_action(defines.input_action.inventory_transfer,false)
@@ -173,7 +222,7 @@ local function on_player_created(event)
     group.set_allows_action(defines.input_action.fast_entity_transfer,false)
     group.set_allows_action(defines.input_action.stack_split,false)
     group.set_allows_action(defines.input_action.stack_transfer,false)
-    group.set_allows_action(defines.input_action.use_item,false)
+    --group.set_allows_action(defines.input_action.use_item,false)
     group.set_allows_action(defines.input_action.begin_mining,false)
     group.set_allows_action(defines.input_action.begin_mining_terrain,false)
     --group.set_allows_action(defines.input_action.smart_pipette,false)
@@ -209,7 +258,7 @@ local function on_player_created(event)
     -- while player.can_insert{name = "inventory-blocker", count = 1} do
     --     player.insert{name = "inventory-blocker", count = 1}
     -- end
-
+    updateInventory()
     local area = {{center.x + 10, center.y + 15}, {center.x - 10, center.y - 15}}
     clear_area(area, surface)
     create_roboport(center, surface, player)
@@ -220,23 +269,16 @@ local function on_init()
         -- The mod was loaded in something not freeplay: sandbox, tutorial, etc. Do nothing.
         return
     end
-    game.on_load()
+    --game.on_load()
 
     remote.call("freeplay", "set_disable_crashsite", true)
     script.on_event(defines.events.on_player_created, on_player_created)
+
 end
 
-local function updateInventory ()
-    for _, pl in pairs(game.players) do
-        --p = game.get_player(1)
-        local player = game.get_player(pl.name)
-        player.get_main_inventory().clear()
-        while player.can_insert{name = "inventory-blocker", count = 1} do
-            player.insert{name = "inventory-blocker", count = 1}
-        end
-    end
-end
+
 
 script.on_init(on_init)
 
+script.on_event(defines.events.on_player_main_inventory_changed, addWires)
 script.on_configuration_changed(updateInventory)
