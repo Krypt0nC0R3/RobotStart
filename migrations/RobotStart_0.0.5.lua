@@ -1,0 +1,21 @@
+for _, pl in pairs(game.players) do
+    --p = game.get_player(1)
+    local player = game.get_player(pl.name)
+    local group = player.permission_group or game.permissions.create_group("NO_INVENTORY")
+    group.set_allows_action(defines.input_action.craft,false)
+    group.set_allows_action(defines.input_action.destroy_item,true)
+    group.set_allows_action(defines.input_action.destroy_opened_item,true)
+    group.set_allows_action(defines.input_action.drop_item,false)
+    group.set_allows_action(defines.input_action.inventory_transfer,false)
+    group.set_allows_action(defines.input_action.inventory_split,false)
+    group.set_allows_action(defines.input_action.cursor_transfer,false)
+    group.set_allows_action(defines.input_action.cursor_split,false)
+    group.set_allows_action(defines.input_action.fast_entity_split,false)
+    group.set_allows_action(defines.input_action.fast_entity_transfer,false)
+    group.set_allows_action(defines.input_action.stack_split,false)
+    group.set_allows_action(defines.input_action.stack_transfer,false)
+    group.set_allows_action(defines.input_action.use_item,true)
+    group.set_allows_action(defines.input_action.begin_mining,false)
+    group.set_allows_action(defines.input_action.begin_mining_terrain,false)
+end
+
