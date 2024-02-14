@@ -1,6 +1,8 @@
 local util = require("util")
 local crash_site = require("crash-site")
 
+local modEnabled = true
+
 local function spawn_entity(entity_name, relative_position, center, surface, extra_options, force)
     -- local entity_name = expressions.entity(entity, vars)
 
@@ -153,24 +155,30 @@ local function insertItem(player,item,count)
 end
 
 local function updateInventory ()
+    if not modEnabled then
+        return
+    end
     for _, pl in pairs(game.players) do
         --p = game.get_player(1)
         local player = game.get_player(pl.name)
         local inventory = player.get_main_inventory()
         inventory.clear()
-        for i=1,12 do
+        for i=1,15 do
             local filter_name = ""
+            inventory.set_filter(i, nil) 
             if i <= 3 then
                 filter_name = "blueprint" -- Blueprints
             elseif i <= 6 then
                 filter_name = "blueprint-book" -- Books
             elseif i <= 9 then
                 filter_name = "deconstruction-planner" -- Deconstruction
-            elseif i <= 10 then
-                filter_name = "green-wire" -- Deconstruction
-            elseif i <= 11 then
-                filter_name = "red-wire" -- Deconstruction
             elseif i <= 12 then
+                filter_name = "upgrade-planner"
+            elseif i <= 13 then
+                filter_name = "green-wire" -- Deconstruction
+            elseif i <= 14 then
+                filter_name = "red-wire" -- Deconstruction
+            elseif i <= 15 then
                 filter_name = "copper-cable" -- Deconstruction
             end
             inventory.set_filter(i, filter_name) 
@@ -185,6 +193,9 @@ local function updateInventory ()
 end
 
 local function addWires(event)
+    if not modEnabled then
+        return
+    end
     local player = game.get_player(event.player_index)
     while player.can_insert{name = "green-wire", count = 1} do
         player.insert{name = "green-wire", count = 1}
@@ -212,7 +223,7 @@ local function on_player_created(event)
     local group = player.permission_group or game.permissions.create_group("NO_INVENTORY")
     group.set_allows_action(defines.input_action.craft,false)
     --group.set_allows_action(defines.input_action.destroy_item,false)
-    group.set_allows_action(defines.input_action.destroy_opened_item,false)
+    --group.set_allows_action(defines.input_action.destroy_opened_item,false)
     group.set_allows_action(defines.input_action.drop_item,false)
     group.set_allows_action(defines.input_action.inventory_transfer,false)
     group.set_allows_action(defines.input_action.inventory_split,false)
@@ -267,6 +278,7 @@ end
 local function on_init()
     if not remote.interfaces.freeplay then
         -- The mod was loaded in something not freeplay: sandbox, tutorial, etc. Do nothing.
+        modEnabled = false
         return
     end
     --game.on_load()

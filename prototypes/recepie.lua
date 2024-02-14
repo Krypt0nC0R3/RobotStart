@@ -70,7 +70,7 @@ data:extend{
           {"copper-cable", 3},
           {"iron-plate", 18},
         },
-        energy_required = 45,
+        energy_required = 8,
         result = "early-logistic-robot"
       },
       {
@@ -84,7 +84,7 @@ data:extend{
           {"copper-cable", 3},
           {"iron-plate", 18},
         },
-        energy_required = 45,
+        energy_required = 8,
         result = "early-construction-robot"
       },
 }
